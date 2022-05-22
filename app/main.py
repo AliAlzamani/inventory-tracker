@@ -12,7 +12,7 @@ db.init_app(app)
 def create_table():
     db.create_all()
  
-@app.route('/' , methods = ['GET','POST'])
+@app.route('/data/create' , methods = ['GET','POST'])
 def create():
     if request.method == 'GET':
         return render_template('createpage.html')
@@ -31,10 +31,22 @@ def create():
         return redirect('/data')
 
  
-@app.route('/data')
+@app.route('/', methods = ['GET','POST'])
+def RetrieveList_initial():
+    items = ItemModel.query.all()
+    if request.method == 'GET':
+        return render_template('datalist.html',items = items)
+    if request.method == 'POST':
+        return redirect('/data/create')
+
+
+@app.route('/data', methods = ['GET','POST'])
 def RetrieveList():
     items = ItemModel.query.all()
-    return render_template('datalist.html',items = items)
+    if request.method == 'GET':
+        return render_template('datalist.html',items = items)
+    if request.method == 'POST':
+        return redirect('/data/create')
  
  
 @app.route('/data/<int:id>')
